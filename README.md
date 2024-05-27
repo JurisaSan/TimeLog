@@ -1,6 +1,8 @@
 # TimeLog
 This repository contains the code for a time logging application.
 
+![image](https://github.com/JurisaSan/TimeLog/assets/164797445/3d955523-acf8-4255-b2ad-ff44974cbce7)
+
 ## Features
 
 - Log time entries with start and end times
