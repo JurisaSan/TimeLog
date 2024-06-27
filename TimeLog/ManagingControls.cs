@@ -13,6 +13,8 @@ namespace TimeLog
         private Button addButton;
         private RadioButton standBy;
         private Label standByLabel;
+        private Label timeCounterLabel;
+        private Label counterLabelText;
         public ManagingControls() { }
         public Button ConfigureAddButton()
         {
@@ -29,6 +31,34 @@ namespace TimeLog
             return addButton;
           
         }
+
+        public Label CounterLabelText()
+        {
+            // Create and configure the standByLabel
+            counterLabelText = new Label();
+            counterLabelText.Text = "Current task is active: ";
+            counterLabelText.TextAlign = ContentAlignment.MiddleCenter;
+            counterLabelText.Font = new Font(counterLabelText.Font.FontFamily, 8);
+            counterLabelText.Size = new System.Drawing.Size(200, 20);
+            counterLabelText.Location = new Point(90, 15);
+            return counterLabelText;
+        }
+
+        public Label TimeCounterLabel()
+        {
+            // Create and configure the standByLabel
+            timeCounterLabel = new Label();
+            timeCounterLabel.Text = "00:00:00";
+            timeCounterLabel.TextAlign = ContentAlignment.MiddleCenter;
+            timeCounterLabel.Font = new Font("Times New Roman", 8,FontStyle.Bold);
+            timeCounterLabel.ForeColor = Color.Green;
+            timeCounterLabel.BorderStyle = BorderStyle.FixedSingle;
+            timeCounterLabel.BackColor = Color.LightYellow;
+            timeCounterLabel.Size = new System.Drawing.Size(62, 20);
+            timeCounterLabel.Location = new Point(290, 15);
+            return timeCounterLabel;
+        }
+
         public RadioButton ConfigureStandByButton()
         {
             // Create and configure the standBy

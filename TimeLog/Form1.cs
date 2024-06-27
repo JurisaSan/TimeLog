@@ -10,13 +10,16 @@ namespace TimeLog
         private Button addButton; // Declare a private Button field
         private RadioButton standBy;
         private Label standByLabel;
+        private Label timeCountLabel;
         private int currentBottom = 20; // Declare a private int field
         private int componentCount = 0; // Declare a private int field
         private List<int> times = new List<int>();
         private Label? totalTime;
+        private Label? counterLabelText;
         private static string rootdir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), ConfigurationManager.AppSettings["LogDirectory"]);
         private static string logname = ConfigurationManager.AppSettings["LogName"];
         private TimeLogger timeLogger = new TimeLogger(rootdir, logname);
+        private System.Windows.Forms.Timer timeCountLabelUpdater;
         DateTime start;
         DateTime stop;
         long diff;
@@ -32,6 +35,16 @@ namespace TimeLog
             toolTip1.SetToolTip(addButton, "Add a new task");
             addButton.Click += AddButton_Click;
             Controls.Add(addButton);
+
+            counterLabelText = new ManagingControls().CounterLabelText();
+            Controls.Add(counterLabelText);
+
+            timeCountLabel = new ManagingControls().TimeCounterLabel();
+            Controls.Add(timeCountLabel);
+
+            timeCountLabelUpdater = new System.Windows.Forms.Timer();
+            timeCountLabelUpdater.Interval = 500; // 1 second
+            timeCountLabelUpdater.Tick += timeCountLabelUpdater_Tick;
 
             standBy = new ManagingControls().ConfigureStandByButton();
             standBy.CheckedChanged += (sender, e) => { if (standBy.Checked) { standBy.BackColor = System.Drawing.Color.Yellow; } else { standBy.BackColor = System.Drawing.Color.Silver; } }; // Change the color of the radioButton1 when it is checked 
@@ -63,6 +76,8 @@ namespace TimeLog
             {
                 AddButton_Click(addButton, null);
             }
+
+      
 
         }
 
@@ -151,6 +166,8 @@ namespace TimeLog
                     //myComponent.TBox1Text = start.ToString("HH:mm:ss");
                     
                     standBy.Checked = false;
+                    counterLabelText.Text = "Current task is active: ";
+                    timeCountLabelUpdater.Start();
                 }
                 else
                 {
@@ -267,7 +284,15 @@ namespace TimeLog
             if (standBy.Checked)
             {
                 UncheckOtherRadioButtons(checkedRadioButton: sender as RadioButton);
+                timeCountLabelUpdater.Stop();
+                counterLabelText.Text = "Last task was active: ";
             }
+        }
+
+        private void timeCountLabelUpdater_Tick(object sender, EventArgs e)
+        {
+            TimeSpan timeElapsed = DateTime.Now - start;
+            timeCountLabel.Text = timeElapsed.Hours.ToString("D2") + ":" + timeElapsed.Minutes.ToString("D2") + ":" + timeElapsed.Seconds.ToString("D2");
         }
     }
 }
